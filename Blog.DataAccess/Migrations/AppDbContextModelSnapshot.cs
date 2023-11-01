@@ -78,11 +78,11 @@ namespace Blog.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5c35c46c-f62d-4328-a25d-0a3c5a06792e"),
+                            Id = new Guid("c4dc541e-e947-4157-b08f-7e37ad1524ef"),
                             CategoryId = new Guid("81ca1870-8ff0-4c5b-8bbd-b6210380d48a"),
                             Content = "Lorem ipsum",
                             CreatedBy = "Cem",
-                            CreatedDate = new DateTime(2023, 10, 31, 11, 14, 53, 132, DateTimeKind.Local).AddTicks(7355),
+                            CreatedDate = new DateTime(2023, 11, 1, 10, 3, 57, 810, DateTimeKind.Local).AddTicks(4420),
                             ImageId = new Guid("516eaf4e-3701-4ac4-acbf-410e4da5261f"),
                             IsDeleted = false,
                             Title = "Test1",
@@ -90,11 +90,11 @@ namespace Blog.DataAccess.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6ae012f7-393f-440c-9c9f-99b572b58278"),
+                            Id = new Guid("96b8c1cf-5196-4a03-b833-a83b2c2b9f73"),
                             CategoryId = new Guid("0057b95d-5c0f-415e-ad50-201c6df5f7cb"),
                             Content = "Lorem ipsum2",
                             CreatedBy = "Cem2",
-                            CreatedDate = new DateTime(2023, 10, 31, 11, 14, 53, 132, DateTimeKind.Local).AddTicks(7362),
+                            CreatedDate = new DateTime(2023, 11, 1, 10, 3, 57, 810, DateTimeKind.Local).AddTicks(4427),
                             ImageId = new Guid("bf66eb62-30e8-4f1a-a8fe-7d65a84581eb"),
                             IsDeleted = false,
                             Title = "Test2",
@@ -143,7 +143,7 @@ namespace Blog.DataAccess.Migrations
                         {
                             Id = new Guid("81ca1870-8ff0-4c5b-8bbd-b6210380d48a"),
                             CreatedBy = "Cem",
-                            CreatedDate = new DateTime(2023, 10, 31, 11, 14, 53, 132, DateTimeKind.Local).AddTicks(7595),
+                            CreatedDate = new DateTime(2023, 11, 1, 10, 3, 57, 810, DateTimeKind.Local).AddTicks(4654),
                             IsDeleted = false,
                             Name = "Core mvc"
                         },
@@ -151,7 +151,7 @@ namespace Blog.DataAccess.Migrations
                         {
                             Id = new Guid("0057b95d-5c0f-415e-ad50-201c6df5f7cb"),
                             CreatedBy = "Cem2",
-                            CreatedDate = new DateTime(2023, 10, 31, 11, 14, 53, 132, DateTimeKind.Local).AddTicks(7600),
+                            CreatedDate = new DateTime(2023, 11, 1, 10, 3, 57, 810, DateTimeKind.Local).AddTicks(4660),
                             IsDeleted = false,
                             Name = "Core mvc 2"
                         });
@@ -202,7 +202,7 @@ namespace Blog.DataAccess.Migrations
                         {
                             Id = new Guid("516eaf4e-3701-4ac4-acbf-410e4da5261f"),
                             CreatedBy = "Cem",
-                            CreatedDate = new DateTime(2023, 10, 31, 11, 14, 53, 132, DateTimeKind.Local).AddTicks(7702),
+                            CreatedDate = new DateTime(2023, 11, 1, 10, 3, 57, 810, DateTimeKind.Local).AddTicks(4766),
                             FileName = " images/testimage",
                             FileType = "jpg",
                             IsDeleted = false
@@ -211,7 +211,7 @@ namespace Blog.DataAccess.Migrations
                         {
                             Id = new Guid("bf66eb62-30e8-4f1a-a8fe-7d65a84581eb"),
                             CreatedBy = "Cem2",
-                            CreatedDate = new DateTime(2023, 10, 31, 11, 14, 53, 132, DateTimeKind.Local).AddTicks(7707),
+                            CreatedDate = new DateTime(2023, 11, 1, 10, 3, 57, 810, DateTimeKind.Local).AddTicks(4771),
                             FileName = " images/testimage2",
                             FileType = "png",
                             IsDeleted = false
