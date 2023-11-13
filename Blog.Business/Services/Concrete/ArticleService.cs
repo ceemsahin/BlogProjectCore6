@@ -15,9 +15,26 @@ namespace Blog.Business.Services.Concrete
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<List<ArticleDto>> GetAllArticleAsync()
+
+        public async Task CreateArticleAsync(AddArticleDto articleAdd)
         {
-            var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync();
+            var userId = Guid.Parse("5B406862-9DAD-468C-A5A7-3232B6B8548E");
+
+            var article = new Article
+            {
+                UserId = userId,
+                Title = articleAdd.Title,
+                Content = articleAdd.Content,
+                CategoryId = articleAdd.CategoryId
+            };
+
+            await _unitOfWork.GetRepository<Article>().AddAsync(article);
+            await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<List<ArticleDto>> GetAllArticleWithCategoryNonDeletedAsync()
+        {
+            var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync(x => !x.IsDeleted, x => x.Category);
             var map = _mapper.Map<List<ArticleDto>>(articles);
             return map;
 

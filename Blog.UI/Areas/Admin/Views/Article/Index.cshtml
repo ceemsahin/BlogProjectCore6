@@ -1,0 +1,49 @@
+﻿@using Blog.Entity.DTOs.Articles;
+@model List<ArticleDto>
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Makale Yönetimi /</span> Makaleler
+    </h4>
+
+    <div class="card">
+        <h5 class="card-header">**</h5>
+        <div class="table-responsive text-nowrap m-5">
+            <a class="btn btn-success mb-3" asp-area="Admin" asp-controller="Article" asp-action="Add">Makale Ekle <i class="bx bx-plus"></i> </a>
+            <table class="table table-bordered" id="articlesTable" width="100%" cellpadding="0">
+                <thead>
+                    <tr>
+                        <th>Başlık</th>
+                        <th>Kategori</th>
+                        <th>Oluşturulma Tarihi</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Başlık</th>
+                        <th>Kategori</th>
+                        <th>Oluşturulma Tarihi</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </tfoot>
+                <tbody class="table-border-bottom-0">
+                    @foreach(var article in Model)
+                    {
+                        <tr name="@article.Id">
+                            <th>@article.Title</th>
+                            <th>@article.Category.Name</th>
+                            <th>@article.CreatedDate.ToShortDateString()</th>
+                            <th>@article.CreatedBy</th>
+                            <th>@(article.IsDeleted ? "Silinmiş" : "Aktif")</th>
+                            <td></td>
+                        </tr>
+                   }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts{<script src="~/js/articleIndex.js" type="application/ecmascript"></script>}
