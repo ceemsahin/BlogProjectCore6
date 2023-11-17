@@ -39,5 +39,23 @@ namespace Blog.Business.Services.Concrete
             return map;
 
         }
+        public async Task<ArticleDto> GetArticleWithCategoryNonDeletedAsync(Guid articleId)
+        {
+            var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleId, x => x.Category);
+            var map = _mapper.Map<ArticleDto>(article);
+            return map;
+
+        }
+        public async Task UpdateArticleAsync(UpdateArticleDto updateArticleDto)
+        {
+            var article = await _unitOfWork.GetRepository<Article>().GetAsync(x=>!x.IsDeleted && x.Id == updateArticleDto.Id,x=>x.Category);
+
+            article.Title = updateArticleDto.Title;
+            article.Content = updateArticleDto.Content;
+            article.CategoryId = updateArticleDto.CategoryId; 
+
+            await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
+            await _unitOfWork.SaveAsync();
+        }
     }
 }

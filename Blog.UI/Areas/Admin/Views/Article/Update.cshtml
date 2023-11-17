@@ -1,5 +1,5 @@
 ﻿@using Blog.Entity.DTOs.Articles;
-@model AddArticleDto
+@model UpdateArticleDto
 
 <div class="container-xxl flex-grow-1 container-p-y">
 
@@ -11,8 +11,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                <form asp-controller="Article" asp-action="Add" method="post" enctype="multipart/form-data">
+                <form asp-controller="Article" asp-action="Update" method="post" enctype="multipart/form-data">
                     <div class="card-body">
+                        <input type="hidden" asp-for="Id" />
                         <div class="form-group">
                             <label asp-for="CategoryId">Kategori</label>
                             <select id="categoryList" class="form-control" asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories,"Id","Name"))"></select>

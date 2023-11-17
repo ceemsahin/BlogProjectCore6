@@ -1,5 +1,4 @@
 ﻿using Blog.Entity.DTOs.Articles;
-using Blog.Entity.Entities;
 
 namespace Blog.Business.Services.Abstract
 {
@@ -7,6 +6,8 @@ namespace Blog.Business.Services.Abstract
     {
         Task<List<ArticleDto>> GetAllArticleWithCategoryNonDeletedAsync();
 
+        Task<ArticleDto> GetArticleWithCategoryNonDeletedAsync(Guid articleId);
         Task CreateArticleAsync(AddArticleDto articleAdd);
+        Task UpdateArticleAsync(UpdateArticleDto updateArticleDto);
     }
 }
