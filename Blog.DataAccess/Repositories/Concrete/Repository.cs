@@ -52,7 +52,7 @@ namespace Blog.DataAccess.Repositories.Concrete
 
         public async Task<T> GetByGuidAsync(Guid id)
         {
-            return await Table.FindAsync();
+            return await Table.FindAsync(id);
         }
 
         public async Task<T> UpdateAsync(T entity)

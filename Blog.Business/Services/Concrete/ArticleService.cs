@@ -16,18 +16,11 @@ namespace Blog.Business.Services.Concrete
             _mapper = mapper;
         }
 
-        public async Task CreateArticleAsync(AddArticleDto articleAdd)
+        public async Task CreateArticleAsync(AddArticleDto articleAddDto)
         {
             var userId = Guid.Parse("5B406862-9DAD-468C-A5A7-3232B6B8548E");
-
-            var article = new Article
-            {
-                UserId = userId,
-                Title = articleAdd.Title,
-                Content = articleAdd.Content,
-                CategoryId = articleAdd.CategoryId
-            };
-
+            var imageId = Guid.Parse("516EAF4E-3701-4AC4-ACBF-410E4DA5261F");
+            var article = new Article(articleAddDto.Title, articleAddDto.Content, userId, articleAddDto.CategoryId, imageId);
             await _unitOfWork.GetRepository<Article>().AddAsync(article);
             await _unitOfWork.SaveAsync();
         }
@@ -46,16 +39,33 @@ namespace Blog.Business.Services.Concrete
             return map;
 
         }
-        public async Task UpdateArticleAsync(UpdateArticleDto updateArticleDto)
+        public async Task<string> UpdateArticleAsync(UpdateArticleDto updateArticleDto)
         {
-            var article = await _unitOfWork.GetRepository<Article>().GetAsync(x=>!x.IsDeleted && x.Id == updateArticleDto.Id,x=>x.Category);
+            var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == updateArticleDto.Id, x => x.Category);
 
             article.Title = updateArticleDto.Title;
             article.Content = updateArticleDto.Content;
-            article.CategoryId = updateArticleDto.CategoryId; 
+            article.CategoryId = updateArticleDto.CategoryId;
 
             await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
             await _unitOfWork.SaveAsync();
+
+            return article.Title;
         }
+
+        public async Task<string> SafeDeleteArticleAsync(Guid articleId)
+        {
+            var article = await _unitOfWork.GetRepository<Article>().GetByGuidAsync(articleId);
+
+            article.IsDeleted = true;
+            article.DeletedDate = DateTime.Now;
+
+            await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
+            await _unitOfWork.SaveAsync();
+
+            return article.Title;
+        }
+
+
     }
 }
