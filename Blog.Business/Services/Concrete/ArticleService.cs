@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Blog.Business.Extensions;
 using Blog.Business.Services.Abstract;
 using Blog.DataAccess.UnitOfWorks;
 using Blog.Entity.DTOs.Articles;
 using Blog.Entity.Entities;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Blog.Business.Services.Concrete
 {
@@ -10,17 +13,22 @@ namespace Blog.Business.Services.Concrete
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ArticleService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly ClaimsPrincipal _user;
+        public ArticleService(IUnitOfWork unitOfWork, IMapper mapper, ClaimsPrincipal principal, IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _user = _contextAccessor.HttpContext.User;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task CreateArticleAsync(AddArticleDto articleAddDto)
         {
-            var userId = Guid.Parse("5B406862-9DAD-468C-A5A7-3232B6B8548E");
+            var userId = _user.GetLoggedInUserId(); 
+            var userEmail = _user.GetLoggedInEmail(); 
             var imageId = Guid.Parse("516EAF4E-3701-4AC4-ACBF-410E4DA5261F");
-            var article = new Article(articleAddDto.Title, articleAddDto.Content, userId, articleAddDto.CategoryId, imageId);
+            var article = new Article(articleAddDto.Title, articleAddDto.Content, userId, articleAddDto.CategoryId, imageId,userEmail);
             await _unitOfWork.GetRepository<Article>().AddAsync(article);
             await _unitOfWork.SaveAsync();
         }
@@ -41,11 +49,14 @@ namespace Blog.Business.Services.Concrete
         }
         public async Task<string> UpdateArticleAsync(UpdateArticleDto updateArticleDto)
         {
+            var userEmail = _user.GetLoggedInEmail();
             var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == updateArticleDto.Id, x => x.Category);
 
             article.Title = updateArticleDto.Title;
             article.Content = updateArticleDto.Content;
             article.CategoryId = updateArticleDto.CategoryId;
+            article.ModifiedDate = DateTime.Now;
+            article.ModifiedBy = userEmail;
 
             await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
             await _unitOfWork.SaveAsync();
@@ -55,10 +66,12 @@ namespace Blog.Business.Services.Concrete
 
         public async Task<string> SafeDeleteArticleAsync(Guid articleId)
         {
+            var userEmail = _user.GetLoggedInEmail();
             var article = await _unitOfWork.GetRepository<Article>().GetByGuidAsync(articleId);
 
             article.IsDeleted = true;
             article.DeletedDate = DateTime.Now;
+            article.DeletedBy = userEmail;
 
             await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
             await _unitOfWork.SaveAsync();

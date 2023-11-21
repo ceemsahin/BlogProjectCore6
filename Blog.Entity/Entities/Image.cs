@@ -1,4 +1,5 @@
 ﻿using Blog.Core.Entities;
+using Blog.Entity.Enums;
 
 namespace Blog.Entity.Entities
 {
