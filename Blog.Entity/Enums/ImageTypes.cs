@@ -2,7 +2,7 @@
 {
     public enum ImageTypes
     {
-        User =0,
-        Post =1
+        User = 0,
+        Post = 1
     }
 }

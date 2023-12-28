@@ -72,18 +72,11 @@ namespace Blog.Business.Helpers.Images
         private const string _articleImageFolder = "article-images";
         private const string _userImageFolder = "user-images";
 
-        public bool Delete(string imageName)
+        public void Delete(string imageName)
         {
             var fileToDelete = Path.Combine($"{wwwroot}/{_imageFolder}/{imageName}");
             if (File.Exists(fileToDelete))
-            {
                 File.Delete(fileToDelete);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
 
         public async Task<ImageUploadedDto> Upload(string name, IFormFile imageFile, ImageTypes imageType, string folderName = null)

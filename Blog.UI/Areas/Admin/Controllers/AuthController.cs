@@ -58,7 +58,7 @@ namespace Blog.UI.Areas.Admin.Controllers
 
         [Authorize]
         [HttpGet]
-        public  async Task<IActionResult> LogOut()
+        public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home", new { Area = "" });

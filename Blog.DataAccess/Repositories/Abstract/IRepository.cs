@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Blog.DataAccess.Repositories.Abstract
 {
-    public interface IRepository<T> where T : class ,IEntityBase,new () 
+    public interface IRepository<T> where T : class, IEntityBase, new()
     {
 
         Task AddAsync(T entity);

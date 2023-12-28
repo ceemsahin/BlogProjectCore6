@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Blog.DataAccess.Repositories.Concrete
 {
-    public class Repository<T> :IRepository<T> where T : class, IEntityBase, new()
+    public class Repository<T> : IRepository<T> where T : class, IEntityBase, new()
     {
         private readonly AppDbContext _dbContext;
 
@@ -16,7 +16,7 @@ namespace Blog.DataAccess.Repositories.Concrete
         }
 
         private DbSet<T> Table { get => _dbContext.Set<T>(); }
-        public async Task<List<T>> GetAllAsync(Expression<Func<T,bool>> predicate = null,params Expression<Func<T, object>>[] includeProperties )
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = Table;
             if (predicate != null)
@@ -25,16 +25,16 @@ namespace Blog.DataAccess.Repositories.Concrete
             }
             if (includeProperties.Any())
             {
-                foreach(var item in includeProperties)
+                foreach (var item in includeProperties)
                     query = query.Include(item);
             }
             return await query.ToListAsync();
         }
 
 
-        public async Task AddAsync (T entity)
+        public async Task AddAsync(T entity)
         {
-            await Table.AddAsync (entity);
+            await Table.AddAsync(entity);
         }
 
         public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
@@ -43,7 +43,7 @@ namespace Blog.DataAccess.Repositories.Concrete
             query = query.Where(predicate);
             if (includeProperties.Any())
             {
-                foreach(var item in includeProperties)
+                foreach (var item in includeProperties)
                     query = query.Include(item);
 
             }

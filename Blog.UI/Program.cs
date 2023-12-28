@@ -1,7 +1,6 @@
+using Blog.Business.Extensions;
 using Blog.DataAccess.Context;
 using Blog.DataAccess.Extensions;
-using Blog.Business.Extensions;
-using Microsoft.EntityFrameworkCore;
 using Blog.Entity.Entities;
 using Microsoft.AspNetCore.Identity;
 using NToastNotify;
@@ -31,7 +30,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(opt =>
     .AddDefaultTokenProviders();
 
 
-builder.Services.ConfigureApplicationCookie(config => 
+builder.Services.ConfigureApplicationCookie(config =>
 {
     config.LoginPath = new PathString("/Admin/Auth/Login");
     config.LogoutPath = new PathString("/Admin/Auth/Logout");
@@ -45,8 +44,8 @@ builder.Services.ConfigureApplicationCookie(config =>
     config.SlidingExpiration = true;
     config.ExpireTimeSpan = TimeSpan.FromDays(1);
     config.AccessDeniedPath = new PathString("/Admin/Auth/AccessDenied");
-    
- });
+
+});
 
 
 var app = builder.Build();
@@ -71,9 +70,9 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapAreaControllerRoute
         (
-        name:"Admin",
-        areaName:"Admin",
-        pattern:"Admin/{controller=Home}/{action=Index}/{id?}"
+        name: "Admin",
+        areaName: "Admin",
+        pattern: "Admin/{controller=Home}/{action=Index}/{id?}"
         );
     endpoints.MapDefaultControllerRoute();
 });

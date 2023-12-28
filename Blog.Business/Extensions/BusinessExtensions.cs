@@ -2,10 +2,8 @@
 using Blog.Business.Helpers.Images;
 using Blog.Business.Services.Abstract;
 using Blog.Business.Services.Concrete;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -21,7 +19,7 @@ namespace Blog.Business.Extensions
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddAutoMapper(assembly);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IImageHelper, ImageHelper>();    
+            services.AddScoped<IImageHelper, ImageHelper>();
             services.AddControllersWithViews().AddFluentValidation(opt =>
             {
                 opt.RegisterValidatorsFromAssemblyContaining<ArticleValidator>();
