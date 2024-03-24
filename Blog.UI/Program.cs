@@ -1,3 +1,4 @@
+using Blog.Business.Describers;
 using Blog.Business.Extensions;
 using Blog.DataAccess.Context;
 using Blog.DataAccess.Extensions;
@@ -26,6 +27,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(opt =>
     opt.Password.RequireUppercase = false;
 })
     .AddRoleManager<RoleManager<AppRole>>()
+    .AddErrorDescriber<CustomIdentityErrorDescriber>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 

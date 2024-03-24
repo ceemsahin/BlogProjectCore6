@@ -96,5 +96,26 @@ namespace Blog.Business.Services.Concrete
 
             return article.Title;
         }
+
+        public async Task<List<ArticleDto>> GetAllDeletedArticlesWithCategoryAsync()
+        {
+            var article = await _unitOfWork.GetRepository<Article>().GetAllAsync(x => x.IsDeleted , x => x.Category);
+            var map = _mapper.Map<List<ArticleDto>>(article);
+            return map;
+        }
+
+        public async Task<string> UndoDeleteArticleAsync(Guid articleId)
+        {
+            var article = await _unitOfWork.GetRepository<Article>().GetByGuidAsync(articleId);
+
+            article.IsDeleted = false;
+            article.DeletedDate = null;
+            article.DeletedBy = null;
+
+            await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
+            await _unitOfWork.SaveAsync();
+
+            return article.Title;
+        }
     }
 }

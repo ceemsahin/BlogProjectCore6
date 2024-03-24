@@ -31,7 +31,7 @@ namespace Blog.Business.Services.Concrete
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<List<CategoryDto>> GetAllCategoriesNonDeleted()
+        public async Task<List<CategoryDto>> GetAllCategoriesNonDeletedAsync()
         {
             var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => !x.IsDeleted);
             var map = _mapper.Map<List<CategoryDto>>(categories);
@@ -39,7 +39,7 @@ namespace Blog.Business.Services.Concrete
             return map;
         }
 
-        public async Task<Category> GetCategoryById(Guid categoryId)
+        public async Task<Category> GetCategoryByIdAsync(Guid categoryId)
         {
             var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
             return category;
@@ -69,6 +69,28 @@ namespace Blog.Business.Services.Concrete
             category.IsDeleted = true;
             category.DeletedDate = DateTime.Now;
             category.DeletedBy = userEmail;
+
+            await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
+            await _unitOfWork.SaveAsync();
+
+            return category.Name;
+        }
+
+        public async Task<List<CategoryDto>> GetAllCategoriesDeletedAsync()
+        {
+            var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => x.IsDeleted);
+            var map = _mapper.Map<List<CategoryDto>>(categories);
+
+            return map;
+        }
+
+        public async Task<string> UndoDeleteCategoryAsync(Guid categoryId)
+        {
+            var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
+
+            category.IsDeleted = false;
+            category.DeletedDate = null;
+            category.DeletedBy = null;
 
             await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
             await _unitOfWork.SaveAsync();

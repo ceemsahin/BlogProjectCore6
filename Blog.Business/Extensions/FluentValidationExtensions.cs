@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Blog.Business.Extensions
@@ -11,6 +12,13 @@ namespace Blog.Business.Extensions
             foreach (var error in result.Errors)
             {
                 modelState.AddModelError(error.PropertyName, error.ErrorMessage);
+            }
+        }
+        public static void AddToIdentityModelState(this IdentityResult result, ModelStateDictionary modelState)
+        {
+            foreach (var error in result.Errors)
+            {
+                modelState.AddModelError("", error.Description);
             }
         }
     }

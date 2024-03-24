@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Blog.Business.Services.Abstract;
+using Blog.Business.Services.Concrete;
 using Blog.Entity.DTOs.Categories;
 using Blog.Entity.Entities;
 using Blog.UI.ResultMessages;
@@ -7,6 +8,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
+using System.ComponentModel.DataAnnotations;
 
 namespace Blog.UI.Areas.Admin.Controllers
 {
@@ -26,9 +28,17 @@ namespace Blog.UI.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var categories = await _categoryService.GetAllCategoriesNonDeleted();
+            var categories = await _categoryService.GetAllCategoriesNonDeletedAsync();
             return View(categories);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DeletedCategories()
+        {
+            var categories = await _categoryService.GetAllCategoriesDeletedAsync();
+            return View(categories);
+        }
+
         [HttpGet]
         public IActionResult Add()
         {
@@ -51,10 +61,30 @@ namespace Blog.UI.Areas.Admin.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddWithAjax([FromBody] AddCategoryDto categoryAddDto)
+        {
+            var map = _mapper.Map<Category>(categoryAddDto);
+            var result = await _validator.ValidateAsync(map);
+
+            if (result.IsValid)
+            {
+                await _categoryService.CreateCategoryAsync(categoryAddDto);
+                _toastNotification.AddSuccessToastMessage(Messages.Category.Add(categoryAddDto.Name), new ToastrOptions { Title = "İşlem Başarılı" });
+
+                return Json(Messages.Category.Add(categoryAddDto.Name));
+            }
+            else
+            {
+                _toastNotification.AddErrorToastMessage(result.Errors.First().ErrorMessage, new ToastrOptions { Title = "İşlem Başarısız" });
+                return Json(result.Errors.First().ErrorMessage);
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> Update(Guid categoryId)
         {
-            var category = await _categoryService.GetCategoryById(categoryId);
+            var category = await _categoryService.GetCategoryByIdAsync(categoryId);
             var map = _mapper.Map<Category, UpdateCategoryDto>(category);
 
             return View(map);
@@ -83,6 +113,14 @@ namespace Blog.UI.Areas.Admin.Controllers
         {
             var name = await _categoryService.SafeDeleteCategoryAsync(categoryId);
             _toastNotification.AddSuccessToastMessage(Messages.Category.Delete(name), new ToastrOptions { Title = "İşlem Başarılı" });
+            return RedirectToAction("Index", "Category", new { Area = "Admin" });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UndoDelete(Guid categoryId)
+        {
+            var name = await _categoryService.UndoDeleteCategoryAsync(categoryId);
+            _toastNotification.AddSuccessToastMessage(Messages.Category.UndoDelete(name), new ToastrOptions { Title = "İşlem Başarılı" });
             return RedirectToAction("Index", "Category", new { Area = "Admin" });
         }
     }

@@ -6,7 +6,6 @@ namespace Blog.Entity.Entities
     {
         public Image()
         {
-
         }
         public Image(string fileName, string fileType, string createdBy)
         {

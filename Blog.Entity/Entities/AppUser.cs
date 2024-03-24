@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Blog.Core.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Blog.Entity.Entities
 {
-    public class AppUser : IdentityUser<Guid>
+    public class AppUser : IdentityUser<Guid>,IEntityBase
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
